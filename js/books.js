@@ -79,7 +79,6 @@ $(document).ready(function(){
     })
 
     // CREAR LIBRO
-
     $("#formBook").submit(function(e){
 
         e.preventDefault()
@@ -124,7 +123,6 @@ $(document).ready(function(){
     })
 
     //  ACTUALIZAR LIBRO
-
     $("#formEditBook").submit(function(e){
 
         e.preventDefault()
@@ -169,7 +167,6 @@ $(document).ready(function(){
     })
 
     // ELIMINAR LIBRO
-
     $(document).on("click",".btnEliminarLibro",function(){
 
         let fila = tabla.row($(this).parents("tr"))
