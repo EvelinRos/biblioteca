@@ -79,39 +79,45 @@ switch ($action) {
 
     case "delete":
 
-        $id = $_POST["id_author"] ?? "";
+        try {
 
-        $stmt = $myPDO->prepare("
+            $id = $_POST["id_author"] ?? "";
+
+            $stmt = $myPDO->prepare("
             SELECT COUNT(*) 
             FROM book 
             WHERE id_author=?
         ");
-        $stmt->execute([$id]);
+            $stmt->execute([$id]);
 
-        if ($stmt->fetchColumn() > 0) {
+            if ($stmt->fetchColumn() > 0) {
+
+                echo json_encode([
+                    "status" => "error",
+                    "message" => "El autor tiene libros asociados."
+                ]);
+                exit;
+
+            } else {
+
+                $stmt = $myPDO->prepare("
+                DELETE FROM author 
+                WHERE id_author=?
+            ");
+                $stmt->execute([$id]);
+
+                echo json_encode([
+                    "status" => "success"
+                ]);
+            }
+
+        } catch (Exception $e) {
 
             echo json_encode([
                 "status" => "error",
-                "message" => "El autor tiene libros asociados."
+                "message" => "Error al eliminar el autor."
             ]);
-            exit;
         }
 
-        $stmt = $myPDO->prepare("
-            DELETE FROM author 
-            WHERE id_author=?
-        ");
-        $stmt->execute([$id]);
-
-        echo json_encode(["status" => "success"]);
-        exit;
-
-
-    default:
-
-        echo json_encode([
-            "status" => "error",
-            "message" => "Acción no válida"
-        ]);
         exit;
 }

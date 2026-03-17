@@ -1,5 +1,7 @@
 $(document).ready(function(){
 
+    let tabla;
+
     cargarAutores();
 
     function toast(msg){
@@ -10,7 +12,6 @@ $(document).ready(function(){
             delay:3000
         })
     }
-
 
     function cargarAutores(){
 
@@ -48,15 +49,15 @@ $(document).ready(function(){
                 })
 
                 if($.fn.DataTable.isDataTable("#tablaAutores")){
-                    $("#tablaAutores").DataTable().clear().destroy();
+                    $("#tablaAutores").DataTable().destroy();
                 }
 
                 $("#tablaAutores tbody").html(html)
-                
-                $("#tablaAutores").DataTable({
+
+                tabla = $("#tablaAutores").DataTable({
                     destroy:true
                 })
-            
+
             },
 
             error:function(xhr){
@@ -67,7 +68,7 @@ $(document).ready(function(){
     }
 
 
-
+    // CREAR AUTOR
     $("#formAuthor").submit(function(e){
 
         e.preventDefault()
@@ -96,10 +97,6 @@ $(document).ready(function(){
 
                 cargarAutores()
 
-            },
-
-            error:function(xhr){
-                console.error(xhr.responseText)
             }
 
         })
@@ -107,7 +104,7 @@ $(document).ready(function(){
     })
 
 
-
+    // EDITAR AUTOR
     $(document).on("click",".btnEditarAutor",function(){
 
         $("#edit_id_author").val($(this).data("id"))
@@ -120,7 +117,7 @@ $(document).ready(function(){
     })
 
 
-
+    // ACTUALIZAR AUTOR
     $("#formEditAuthor").submit(function(e){
 
         e.preventDefault()
@@ -155,14 +152,6 @@ $(document).ready(function(){
 
                 cargarAutores()
 
-            },
-
-            error:function(xhr){
-
-                $btn.prop("disabled",false).html("Actualizar")
-
-                console.error(xhr.responseText)
-
             }
 
         })
@@ -170,20 +159,20 @@ $(document).ready(function(){
     })
 
 
-    $(document).on("click",".btnEliminarAutor",function(e){
+    // ELIMINAR AUTOR
+    $(document).on("click",".btnEliminarAutor",function(){
 
-        e.preventDefault()
-
+        let fila = tabla.row($(this).parents("tr"))
         let id = $(this).data("id")
 
         Swal.fire({
             title:"¿Eliminar autor?",
-            text:"No se podrá recuperar",
+            text:"Esta acción no se puede deshacer.",
             icon:"warning",
             showCancelButton:true,
-            confirmButtonText:"Eliminar"
-        })
-        .then((result)=>{
+            confirmButtonText:"Eliminar",
+            cancelButtonText:"Cancelar"
+        }).then((result)=>{
 
             if(result.isConfirmed){
 
@@ -197,19 +186,14 @@ $(document).ready(function(){
                     success:function(resp){
 
                         if(resp.status==="error"){
-
                             Swal.fire("Error",resp.message,"error")
                             return
                         }
 
+                        fila.remove().draw(false)
+
                         toast("Autor eliminado correctamente.")
 
-                        cargarAutores()
-
-                    },
-
-                    error:function(xhr){
-                        console.error(xhr.responseText)
                     }
 
                 })

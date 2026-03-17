@@ -175,13 +175,17 @@ $(document).ready(function(){
 
         Swal.fire({
             title:"¿Eliminar libro?",
+            text:"Esta acción no se puede deshacer.",
             icon:"warning",
-            showCancelButton:true
+            showCancelButton:true,
+            confirmButtonText:"Eliminar",
+            cancelButtonText:"Cancelar"
         }).then((result)=>{
 
             if(result.isConfirmed){
 
                 $.ajax({
+
                     url:"api/book.php?action=delete",
                     method:"POST",
                     data:{id_book:id},
@@ -197,7 +201,7 @@ $(document).ready(function(){
                       
                         fila.remove().draw(false)
 
-                        toast("Libro eliminado correctamente")
+                        toast("Libro eliminado correctamente.")
                     }
                 })
             }
