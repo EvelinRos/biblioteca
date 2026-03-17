@@ -38,16 +38,14 @@ $page = $_GET["page"] ?? "books";
                 <ul class="nav nav-pills nav-sidebar flex-column">
 
                     <li class="nav-item">
-                        <a href="index.php?page=books" class="nav-link <?php if ($page == "books")
-                            echo 'active'; ?>">
+                        <a href="#" class="nav-link menu-link" data-page="books">
                             <i class="nav-icon fas fa-book"></i>
                             <p>Libros</p>
                         </a>
                     </li>
 
                     <li class="nav-item">
-                        <a href="index.php?page=authors" class="nav-link <?php if ($page == "authors")
-                            echo 'active'; ?>">
+                        <a href="#" class="nav-link menu-link" data-page="authors">
                             <i class="nav-icon fas fa-user"></i>
                             <p>Autores</p>
                         </a>
@@ -59,16 +57,7 @@ $page = $_GET["page"] ?? "books";
 
         </aside>
 
-        <div class="content-wrapper p-3">
-
-            <?php
-
-            if ($page == "books")
-                include "views/books.php";
-            if ($page == "authors")
-                include "views/authors.php";
-
-            ?>
+        <div class="content-wrapper p-3" id="contenido">
 
         </div>
 
@@ -90,15 +79,40 @@ $page = $_GET["page"] ?? "books";
     <!-- SWEETALERT -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
+    <script>
 
-    <?php if ($page == "books") { ?>
-        <script src="js/books.js"></script>
-    <?php } ?>
+        $(document).ready(function () {
 
-    <?php if ($page == "authors") { ?>
-        <script src="js/authors.js"></script>
-    <?php } ?>
+            $("#contenido").load("views/books.php", function () {
+                $.getScript("js/books.js")
+            })
 
+            $(".menu-link").click(function (e) {
+
+                e.preventDefault()
+
+                let page = $(this).data("page")
+
+                $(".menu-link").removeClass("active")
+                $(this).addClass("active")
+
+                $("#contenido").load("views/" + page + ".php", function () {
+
+                    if (page === "books") {
+                        $.getScript("js/books.js")
+                    }
+
+                    if (page === "authors") {
+                        $.getScript("js/authors.js")
+                    }
+
+                })
+
+            })
+
+        })
+
+    </script>
 
 </body>
 

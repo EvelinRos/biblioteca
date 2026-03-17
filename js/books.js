@@ -79,6 +79,7 @@ $(document).ready(function(){
     })
 
     // CREAR LIBRO
+
     $("#formBook").submit(function(e){
 
         e.preventDefault()
@@ -123,6 +124,7 @@ $(document).ready(function(){
     })
 
     //  ACTUALIZAR LIBRO
+
     $("#formEditBook").submit(function(e){
 
         e.preventDefault()
@@ -143,7 +145,7 @@ $(document).ready(function(){
 
                 $btn.prop("disabled",false).html("Actualizar")
 
-                if(resp.status !== "error"){
+                if(resp.status !== "success"){
                     Swal.fire("Error",resp.message,"error")
                     return
                 }
@@ -153,8 +155,8 @@ $(document).ready(function(){
 
                 toast("Libro actualizado correctamente.")
 
-                cargarLibros()
-            
+                tabla.ajax.reload(null,false)
+
             },
 
             error:function(xhr){
@@ -162,12 +164,12 @@ $(document).ready(function(){
                 $btn.prop("disabled",false).html("Actualizar")
 
                 console.error(xhr.responseText)
-                   
             }
         })
     })
 
     // ELIMINAR LIBRO
+
     $(document).on("click",".btnEliminarLibro",function(){
 
         let fila = tabla.row($(this).parents("tr"))
