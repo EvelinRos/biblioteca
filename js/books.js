@@ -41,42 +41,39 @@ $(document).ready(function(){
     }
 
     function cargarAutores(selectId, selectedId = null){
-
-    $.ajax({
-        url:'api/author.php?action=list',
-        method:'GET',
-        dataType:'json',
-
-        success:function(response){
-
-            let select = $(selectId)
-
-            select.empty()
-            select.append('<option value="">Seleccione autor</option>')
-
-            response.forEach(author=>{
-                select.append(`
-                    <option value="${author.id_author}">
-                        ${author.name_author}
-                    </option>
-                `)
-            })
-
+        
+        $.ajax({
+            url:'api/author.php?action=list',
+            method:'GET',
+            dataType:'json',
             
-            if(selectedId){
-                select.val(selectedId)
+            success:function(response){
+                
+                let select = $(selectId)
+
+                select.empty()
+                select.append('<option value="">Seleccione autor</option>')
+
+                response.forEach(author=>{
+                    select.append(`
+                        <option value="${author.id_author}">
+                            ${author.name_author}
+                        </option>
+                    `)
+                })
+
+                if(selectedId){
+                    select.val(selectedId)
+                }
             }
-        }
-    })
-}
+        })
+    }
 
     $('#modalBook').on('shown.bs.modal', function() {
         cargarAutores("#id_author")
     })
 
-    $('#modalEditBook').on('shown.bs.modal', function() {
-        cargarAutores("#edit_author")
-    })
+   
 
     // CREAR LIBRO
     $("#formBook").submit(function(e){
@@ -110,14 +107,19 @@ $(document).ready(function(){
     let filaEditar = null
 
     $(document).on("click",".btnEditarLibro",function(){
-
+        
         filaEditar = tabla.row($(this).parents("tr"))
 
-        $("#edit_id").val($(this).data("id"))
-        $("#edit_title").val($(this).data("title"))
+        let id = $(this).data("id")
+        let title = $(this).data("title")
         let authorId = $(this).data("author")
+        let isbn = $(this).data("isbn")
+
+        $("#edit_id").val(id)
+        $("#edit_title").val(title)
+        $("#edit_isbn").val(isbn)
+
         cargarAutores("#edit_author", authorId)
-        $("#edit_isbn").val($(this).data("isbn"))
 
         new bootstrap.Modal(document.getElementById('modalEditBook')).show()
     })

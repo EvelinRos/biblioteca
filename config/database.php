@@ -1,6 +1,6 @@
 <?php
 
-$hostDB = 'localhost';
+$hostDB = 'host.docker.internal';
 $nameDB = 'library';
 $userDB = 'user';
 $pwDB = 'passwd123';
@@ -16,5 +16,4 @@ try {
 } catch (PDOException $e) {
 
     die("Error DB: " . $e->getMessage());
-
 }

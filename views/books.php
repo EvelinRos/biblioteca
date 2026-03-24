@@ -83,7 +83,7 @@
 
                     <div class="mb-3">
 
-                        <label class="form-label">ISBN</label>
+                        <label class="form-label">Isbn</label>
 
                         <input type="text" name="isbn" class="form-control">
 
