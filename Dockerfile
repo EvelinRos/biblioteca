@@ -6,5 +6,9 @@ RUN docker-php-ext-install pdo pdo_mysql
 # Activar mod_rewrite
 RUN a2enmod rewrite
 
-# Copiar configuración de Apache
-COPY apache.conf /etc/apache2/sites-available/000-default.conf
+# Establecer directorio de trabajo
+WORKDIR /var/www/html
+
+# Ajustar permisos
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 755 /var/www/html
