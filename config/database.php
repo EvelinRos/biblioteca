@@ -1,9 +1,26 @@
 <?php
 
-$hostDB = 'db';
-$nameDB = 'library';
-$userDB = 'user';
-$pwDB = 'passwd123';
+// Cargar variables de entorno desde .env
+$envFile = __DIR__ . '/../.env';
+if (file_exists($envFile)) {
+    $lines = file($envFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
+    foreach ($lines as $line) {
+        if (strpos($line, '=') !== false && strpos($line, '#') !== 0) {
+            list($key, $value) = explode('=', $line, 2);
+            $key = trim($key);
+            $value = trim($value);
+            if (!isset($_ENV[$key])) {
+                $_ENV[$key] = $value;
+            }
+        }
+    }
+}
+
+// Obtener credenciales desde variables de entorno
+$hostDB = $_ENV['DB_HOST'] ?? getenv('DB_HOST') ?? 'db';
+$nameDB = $_ENV['DB_NAME'] ?? getenv('DB_NAME') ?? 'library';
+$userDB = $_ENV['DB_USER'] ?? getenv('DB_USER') ?? 'user';
+$pwDB = $_ENV['DB_PASSWORD'] ?? getenv('DB_PASSWORD') ?? 'passwd123';
 
 try {
 
